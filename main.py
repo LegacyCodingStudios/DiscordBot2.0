@@ -8,6 +8,8 @@ import json
 
 import datetime
 
+import nacl
+
 intents = discord.Intents.default()
 intents.members = True
 
@@ -52,6 +54,9 @@ async def unban_loop():
 async def on_ready():
   print("BOT IS ONLINE")
   unban_loop.start()
+
+  online = client.get_channel(804633372948430881)
+  await online.send("The bot is now online")
 
 @client.event
 async def on_guild_join(guild):

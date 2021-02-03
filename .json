@@ -1,6 +1,7 @@
 {
-  "Version": "0.1.5",
+  "Version": "0.2.0",
   "Language": "Python",
   "Creator": "DanHowe0#4275",
-  "Status": "Ready for release"
+  "Status": "Ready for release",
+  "Website": "https://discordbot20web.danhowe.repl.co/"
 }
