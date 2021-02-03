@@ -3,15 +3,6 @@ UNKNOWN
 - AFK
 - Emotes
 - random colour
-- reminder
-- roll
-- rps (against the bot)
-- flip
-- poll
-
-
-INFO
-- Ping
 
 MOD
 - warn (with clear, view, etc)

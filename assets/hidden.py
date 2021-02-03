@@ -59,7 +59,18 @@ class BotManagementCommands(commands.Cog, name='Dev Commands'):
     with open("./assets/json/suggestions.json", "w") as f:
       json.dump(data, f, indent=2)
 
+  @commands.command()
+  @commands.check(is_dev)
+  async def update(self, ctx, rm, *, message):
+    with open("./assets/json/reminders.json", "r") as f:
+      data = json.load(f)
 
+    rm = rm.lower().capitalize()
+
+    if rm in data:
+      for i in data[rm]:
+        user = self.client.get_user(i)
+        await user.send(message)
 
 
 def setup(client):

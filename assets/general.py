@@ -23,8 +23,19 @@ class General(commands.Cog):
     await ctx.send(ctx.emojis)
 
   @commands.command()
-  async def roll(self, ctx, sides=6, *args):
-    await ctx.send(random.randint(1, sides))
+  async def roll(self, ctx, sides=6, amount=1,  *args):
+    vals = []
+    tot = 0
+    
+    for i in range(amount):
+      dice = random.randint(1, sides)
+      tot += dice
+      vals.append(str(dice))
+      
+    vals.append(f"Total: {tot}")
+    
+    await ctx.send(" ".join(vals))
+      
 
   @commands.command()
   async def rps(self, ctx, choice, *args):
@@ -70,7 +81,7 @@ class General(commands.Cog):
     with open("./assets/json/suggestions.json", "r") as f:
       data = json.load(f)
       
-      id = len(data)+1
+      id = len(data)
 
       data.update({
         id:{
@@ -84,6 +95,44 @@ class General(commands.Cog):
     with open("./assets/json/suggestions.json", "w") as f:
       json.dump(data, f, indent=2)
 
+  @commands.command(aliases=["rm", "reminders"])
+  async def reminder(self, ctx, rm=None):
+    with open("./assets/json/reminders.json", "r") as f:
+        data = json.load(f)
+
+    if rm != None:
+      rm = rm.lower().capitalize()
+
+      if rm in data:
+        if ctx.author.id in data[rm]:
+          data[rm].remove(ctx.author.id)
+        else:
+          data[rm].append(ctx.author.id)
+
+      with open("./assets/json/reminders.json", "w") as f:
+        json.dump(data, f, indent=2)
+    else:
+      embed = discord.Embed(title="Reminders")
+      uid = ctx.author.id
+
+      for i in data:
+        if uid in data[i]:
+          embed.add_field(name=i, value="ON", inline=False)
+        else:
+          embed.add_field(name=i, value="OFF", inline=False)
+
+      await ctx.send(embed=embed)
+
+  @commands.command()
+  async def image(self, ctx, user: discord.Member=None):
+    if user == None:
+      embed = discord.Embed(title=f"{ctx.guild}'s icon")
+      embed.set_image(url=ctx.guild.icon_url)
+    else:
+      embed = discord.Embed(title=f"{user}'s icon")
+      embed.set_image(url=user.avatar_url)
+
+    await ctx.send(embed=embed)
 
 def setup(client):
   client.add_cog(General(client))

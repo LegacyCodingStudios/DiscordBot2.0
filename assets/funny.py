@@ -11,6 +11,7 @@ class EatDogs(commands.Cog):
   @commands.command(hidden=True)
   @commands.check(trollers)
   async def spam(self, ctx, amount, *args):
+    await ctx.message.delete()
     for i in range(0, int(amount)):
       await ctx.send(" ".join(args))
 

@@ -54,6 +54,59 @@ class Moderator(commands.Cog):
       json.dump(data, f, indent=2)
 
   @commands.command()
+  @commands.has_permissions(kick_members=True)
+  async def warn(self, ctx, user: discord.Member, *, reason="You Have Been Warned!"):
+    with open("assets/json/sanctions.json", "r") as f:
+      data = json.load(f)
+
+    gdata = data[str(ctx.guild.id)]
+    wdata = gdata["warnings"]
+
+    id = 0
+
+    for i in wdata:
+      if int(i) >= id:
+        id = int(i)+1
+        
+
+    wdata.update({id: [f"{user.name}#{user.discriminator}", reason, str(datetime.datetime.now())]})
+
+    with open("assets/json/sanctions.json", "w") as f:
+      json.dump(data, f, indent=2)
+
+  @commands.command()
+  @commands.has_permissions(administrator=True)
+  async def view_warns(self, ctx, user: discord.Member = None):
+    with open("assets/json/sanctions.json", "r") as f:
+      data = json.load(f)
+
+    embed = discord.Embed(title="Warnings")
+    warns = data[str(ctx.guild.id)]["warnings"]
+
+    for i in warns:
+      if user == None:
+        embed.add_field(name=f"{i}: {warns[i][0]}", value=f"Reason: {warns[i][1]}\nTimestamp: {warns[i][2][:19]}\n.", inline=False)
+      else:
+        if warns[i][0] == f"{user.name}#{user.discriminator}":
+          embed.add_field(name=f"{i}: {warns[i][0]}", value=f"Reason: {warns[i][1]}\nTimestamp: {warns[i][2][:19]}\n.", inline=False)
+    
+    await ctx.send(embed=embed)
+
+  @commands.command()
+  @commands.has_permissions(administrator=True)
+  async def del_warn(self, ctx, id, *args):
+    with open("assets/json/sanctions.json", "r") as f:
+      data = json.load(f)
+
+    wdata = data[str(ctx.guild.id)]["warnings"]
+
+    if id in wdata:
+      del wdata[id]
+
+    with open("assets/json/sanctions.json", "w") as f:
+      json.dump(data, f, indent=2)
+
+  @commands.command()
   @commands.has_permissions(manage_messages=True)
   async def purge(self, ctx, amount=10, user: discord.Member = None):
     channel = ctx.channel
