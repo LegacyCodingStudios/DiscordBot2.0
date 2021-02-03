@@ -72,6 +72,11 @@ class BotManagementCommands(commands.Cog, name='Dev Commands'):
         user = self.client.get_user(i)
         await user.send(message)
 
+  @commands.command()
+  @commands.check(is_dev)
+  async def git(self, ctx, *args):
+    await ctx.send("https://github.com/danhowe0/DiscordBot2.0")
+
 
 def setup(client):
   client.add_cog(BotManagementCommands(client))
