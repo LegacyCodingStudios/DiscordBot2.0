@@ -26,7 +26,7 @@ class Cogs(commands.Cog):
   @commands.check(is_dev)
   async def unload(self, ctx, ext, *args):
     try:
-      self.client.UNload_extension(f"assets.{ext}")
+      self.client.unload_extension(f"assets.{ext}")
       await ctx.reply("COG UNLOADED SUCCESSFULLY")
     except:
       await ctx.reply("COG NOT UNLOADED")

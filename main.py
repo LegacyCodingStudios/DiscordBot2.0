@@ -10,63 +10,45 @@ import datetime
 
 import nacl
 
+import BotGui
+
 intents = discord.Intents.default()
 intents.members = True
 
 client = commands.Bot(command_prefix="-", intents=intents)
 
-@tasks.loop(minutes=1)
-async def unban_loop():
-  print("unban loop")
-
-  with open("assets/json/sanctions.json", "r") as f:
-    data = json.load(f)
-    
-  bans = data["tempbans"]
+botgui = BotGui.DeveloperGui(client)
   
-  
-  for i in bans:
-    guild = client.get_guild(int(i))
-    for j in bans[i]:
-      banned_users = await guild.bans()
-      member_name, member_discriminator = j.split("#")
-
-      userdata = bans[i][j]
-      year = userdata["year"]
-      month = userdata["month"]
-      day = userdata["day"]
-      hour = userdata["hour"]
-      minute = userdata["mins"]
-
-
-      for ban_entry in banned_users:
-        user = ban_entry.user
-
-        if (user.name, user.discriminator) == (member_name, member_discriminator) and datetime.datetime(year=year, month=month, day=day, hour=hour, minute=minute) <= datetime.datetime.now():
-            await guild.unban(user)
-            del data["tempbans"][i][j]
-            with open("assets/json/sanctions.json", "w") as f:
-              json.dump(data, f, indent=2)
-            return
-  
-
 @client.event
 async def on_ready():
   print("BOT IS ONLINE")
-  unban_loop.start()
-
-  online = client.get_channel(804633372948430881)
-  await online.send("The bot is now online")
+  # online = client.get_channel(804633372948430881)
+  # await online.send("The bot is now online")
+  
+  #botgui = BotGui.DeveloperGui(client)
+  #botgui.main()
+  
 
 @client.event
 async def on_guild_join(guild):
   with open("assets/json/sanctions.json", "r") as f:
     data = json.load(f)
 
-  data.update({"tempbans": {guild.id: {}}})
+  tb = data["tempbans"]
+  tb.update({guild.id: {}})
 
-  with open("assets/json/sanctions.json", "r") as f:
+  data.update({str(guild.id): {"warnings": {}}})
+
+  with open("assets/json/sanctions.json", "w") as f:
+    json.dump(data, f, indent=2)
+
+  with open("assets/json/economy.json", "r") as f:
     data = json.load(f)
+
+  data.update({str(guild.id): {}})
+
+  with open("assets/json/economy.json", "w") as f:
+    json.dump(data, f, indent=2)
 
   
   

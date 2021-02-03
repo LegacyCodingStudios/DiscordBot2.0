@@ -24,3 +24,14 @@ class Economy(commands.Cog):
     data[str(ctx.guild.id)][f"{ctx.author.name}#{ctx.author.discriminator}"]["bank"] += amount
 
     data[str(ctx.guild.id)][f"{ctx.author.name}#{ctx.author.discriminator}"]["hand"] -= amount
+
+  @commands.command()
+  async def balance(self, ctx, user: discord.Member=None):
+    if user == None:
+      user = ctx.author
+
+    embed = discord.Embed(title=f"{user.mention}'s balance")
+    embed.add_field(name="Bank")
+
+def setup(client):
+  client.add_cog(Economy(client))

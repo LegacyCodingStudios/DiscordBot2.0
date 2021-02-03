@@ -18,7 +18,7 @@ class Ids(commands.Cog):
   async def userid(self, ctx, user=None, *args):
 
     if user == None:
-      userid = ctx.author.id
+      userid = ctx.author
     else:
       userid = discord.utils.get(self.client.get_all_members(), id=int(user[3:-1]))
       if userid == None:
@@ -27,7 +27,7 @@ class Ids(commands.Cog):
     if userid == None:
       await ctx.reply("No user found")
     else:
-      await ctx.reply(userid)
+      await ctx.reply(userid.id)
 
   @commands.command()
   @commands.check(is_dev)

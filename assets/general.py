@@ -12,6 +12,11 @@ class General(commands.Cog):
   def __init__(self, client):
     self.client = client
 
+  @commands.Cog.listener()
+  async def on_message(self, ctx):
+    if "malachi" in ctx.content.lower():
+      await ctx.delete()
+
   @commands.command()
   async def AFK(self, ctx, *, message):
     await ctx.send("WIP")
@@ -39,14 +44,15 @@ class General(commands.Cog):
 
   @commands.command()
   async def rps(self, ctx, choice, *args):
-    bot = random.choice(["r", "p", "s"])
+    botsay = random.choice(["Rock", "Paper", "Scissors"])
+    bot = botsay[0].lower()
     user = choice[0].lower()
     if (bot == "r" and user == "p") or (bot == "p" and user == "s") or (bot == "s" and user == "r"):
-      await ctx.send("You Win!")
+      await ctx.send(f"{botsay}! You Win!")
     elif (bot == "r" and user == "s") or (bot == "p" and user == "r") or (bot == "s" and user == "p"):
-      await ctx.send("The Bot Wins!")
+      await ctx.send(f"{botsay}! The Bot Wins!")
     else:
-      await ctx.send("Its a Draw!")
+      await ctx.send(f"{botsay}! Its a Draw!")
 
   @commands.command()
   async def flip(self, ctx, *args):
@@ -133,6 +139,16 @@ class General(commands.Cog):
       embed.set_image(url=user.avatar_url)
 
     await ctx.send(embed=embed)
+
+  @commands.command(name="8ball")
+  async def eight_ball(self, ctx, *, message):
+    responses = ['It is certain', 'It is decidedly so', 'Without a doubt', 'Yes – definitely', 'You may rely on it', 'As I see it, yes', 'Most likely', 'Outlook good', 'Yes Signs point to yes', 'Reply hazy', 'try again', 'Ask again later', 'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', 'Dont count on it', 'My reply is no', 'My sources say no', 'Outlook not so good', 'Very doubtful']
+
+    choice = random.choice(responses)
+
+    embed = discord.Embed(title=message.capitalize(), description=choice)
+    await ctx.send(embed=embed)
+
 
 def setup(client):
   client.add_cog(General(client))

@@ -47,8 +47,9 @@ class Moderator(commands.Cog):
 
     time = datetime.datetime.today() + datetime.timedelta(minutes=duration)
 
+    tb = data["tempbans"][str(ctx.guild.id)]
 
-    data.update({"tempbans": {ctx.guild.id: {f"{ctx.author.name}#{ctx.author.discriminator}": {"year": time.year, "month": time.month, "day": time.day, "hour": time.hour, "mins": time.minute}}}})
+    tb.update({f"{user.name}#{user.discriminator}": {"year": time.year, "month": time.month, "day": time.day, "hour": time.hour, "mins": time.minute}})
 
     with open("assets/json/sanctions.json", "w") as f:
       json.dump(data, f, indent=2)

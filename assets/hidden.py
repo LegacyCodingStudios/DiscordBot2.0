@@ -33,7 +33,7 @@ class BotManagementCommands(commands.Cog, name='Dev Commands'):
     with open("./assets/json/suggestions.json", "r") as f:
       data = json.load(f)
 
-    embed = discord.Embed(description="Unresolved Suggestions")
+    embed = discord.Embed(title="Unresolved Suggestions")
 
     empty = True
 
@@ -76,6 +76,12 @@ class BotManagementCommands(commands.Cog, name='Dev Commands'):
   @commands.check(is_dev)
   async def git(self, ctx, *args):
     await ctx.send("https://github.com/danhowe0/DiscordBot2.0")
+
+  @commands.command()
+  @commands.check(is_dev)
+  async def get_invite(self, ctx, id):
+    pass
+
 
 
 def setup(client):
