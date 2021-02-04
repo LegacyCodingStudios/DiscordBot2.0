@@ -10,6 +10,7 @@ class EatDogs(commands.Cog):
     self.spam = True
 
   def trollers(ctx):
+    return False
     return str(ctx.author.id) in ["428369959501168650", "310806196330168320", "572152846351597579", "363614905607389186"]
 
   @commands.command(hidden=True)

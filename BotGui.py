@@ -1,4 +1,4 @@
-from tkinter import Tk, Label, Button, Entry, StringVar
+from tkinter import Tk, Label, Button, Entry, StringVar, Text
 from tkinter.constants import CENTER
 
 import discord
@@ -12,6 +12,7 @@ class DeveloperGui:
 
   def next(self, cmd, destroy=True, win=None):
     if destroy:
+      win.update()
       win.destroy()
 
     cmd()
@@ -29,10 +30,11 @@ class DeveloperGui:
         pw = pword.get()
 
         load_dotenv()
-        creds = os.getenv("gui_creds")
+        pswrd = os.getenv("gui_pass")
+        usrnm = os.getenv("gui_user")
 
-        if un == creds[0] and pword == creds[1]:
-          #login.destroy()
+        if un == usrnm and pw == pswrd:
+          login.destroy()
           _main()
 
       login = Tk()
@@ -47,17 +49,25 @@ class DeveloperGui:
       Entry(login, textvariable=pword, show="*").grid(row=3, column=2)
 
       Button(login, text="Submit", command=_check).grid(row=5, column=2, sticky="W")
-      Button(login, text="Back", command=self.next(self.main, True, login)).grid(row=5, column=2, sticky="E")
+      Button(login, text="Back", command=lambda: self.next(self.main, True, login)).grid(row=5, column=2, sticky="E")
 
-      pass
+      login.mainloop()
 
     def _main():
-      # only do this once logged in so not everone can do this thru the web link
-      print("main")
-      pass
+      def _tosend():
+        input = text.get("1.0",'end-1c')
+        _send(input)
 
-    def _send():
+      main = Tk()
+      text = Text(main).place(relx=0.5, rely=0.5, anchor=CENTER)
+
+      Button(main, text="SEND", command=_tosend).place(relx=0.3, rely=0.8, anchor=CENTER)
+      Button(main, text="BACK", command=lambda: self.next(self.main, True, main)).place(relx=0.6, rely=0.8, anchor=CENTER)
+      
+      main.mainloop()
+
+    def _send(data):
       # takes the input from _main and sends it to all the system channels or a specified channel
-      pass
+      print(data)
 
     _login()

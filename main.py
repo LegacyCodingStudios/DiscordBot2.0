@@ -2,13 +2,7 @@ import discord
 from discord.ext import commands, tasks
 
 from dotenv import load_dotenv
-import os
-
-import json
-
-import datetime
-
-import nacl
+import os, json, datetime, nacl, threading
 
 import BotGui
 
@@ -16,8 +10,6 @@ intents = discord.Intents.default()
 intents.members = True
 
 client = commands.Bot(command_prefix="-", intents=intents)
-
-botgui = BotGui.DeveloperGui(client)
   
 @client.event
 async def on_ready():
@@ -25,8 +17,11 @@ async def on_ready():
   # online = client.get_channel(804633372948430881)
   # await online.send("The bot is now online")
   
-  #botgui = BotGui.DeveloperGui(client)
-  #botgui.main()
+  botgui = BotGui.DeveloperGui(client)
+
+  x = threading.Thread(target=botgui.main)
+
+  x.start()
   
 
 @client.event
