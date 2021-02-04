@@ -61,6 +61,12 @@ class BotManagementCommands(commands.Cog, name='Dev Commands'):
 
   @commands.command()
   @commands.check(is_dev)
+  async def send(self, ctx, user: discord.Member, *, message):
+    await user.send(message)
+    await ctx.reply("Message sent!")
+
+  @commands.command()
+  @commands.check(is_dev)
   async def update(self, ctx, rm, *, message):
     with open("./assets/json/reminders.json", "r") as f:
       data = json.load(f)
@@ -71,7 +77,7 @@ class BotManagementCommands(commands.Cog, name='Dev Commands'):
       for i in data[rm]:
         user = self.client.get_user(i)
         await user.send(message)
-
+#
   @commands.command()
   @commands.check(is_dev)
   async def git(self, ctx, *args):
@@ -79,8 +85,17 @@ class BotManagementCommands(commands.Cog, name='Dev Commands'):
 
   @commands.command()
   @commands.check(is_dev)
-  async def get_invite(self, ctx, id):
-    pass
+  async def get_invite(self, ctx, id: int=None):
+    if id == None:
+      guild = ctx.guild
+    else:
+      guild = discord.utils.get(self.client.guilds, id=id)
+
+    invs = await guild.invites()
+    print(invs[0])
+
+    embed = discord.Embed(title=guild.name, description=str(invs[0]))
+    await ctx.send(embed=embed)
 
 
 

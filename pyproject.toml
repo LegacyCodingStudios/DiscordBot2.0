@@ -9,6 +9,9 @@ python = "^3.8"
 discord = "^1.0.1"
 python-dotenv = "^0.15.0"
 PyNaCl = "^1.4.0"
+docx = "^0.2.4"
+httpcore = "^0.12.3"
+httpx = "^0.16.1"
 
 [tool.poetry.dev-dependencies]
 

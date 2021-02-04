@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-
+#
 import asyncio
 
 class EatDogs(commands.Cog):
@@ -34,6 +34,8 @@ class EatDogs(commands.Cog):
     self.spam = False
     await asyncio.sleep(10)
     self.spam = True
+
+  
 
 def setup(client):
   client.add_cog(EatDogs(client))

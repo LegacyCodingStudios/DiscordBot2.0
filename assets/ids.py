@@ -3,7 +3,7 @@ from discord.ext import commands
 
 from dotenv import load_dotenv
 import os
-
+#
 class Ids(commands.Cog):
   def __init__(self, client):
     self.client = client
@@ -15,7 +15,7 @@ class Ids(commands.Cog):
 
   @commands.command()
   @commands.check(is_dev)
-  async def userid(self, ctx, user=None, *args):
+  async def userid(self, ctx, user: discord.Member=None, *args):
 
     if user == None:
       userid = ctx.author

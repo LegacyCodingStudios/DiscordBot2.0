@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import asyncio
-
+#
 from typing import Optional
 
 import json
@@ -148,6 +148,24 @@ class General(commands.Cog):
 
     embed = discord.Embed(title=message.capitalize(), description=choice)
     await ctx.send(embed=embed)
+
+  @commands.command()
+  async def ship(self, ctx, name1=None, name2=None, *args):
+    if name1 == None:
+      users = ctx.guild.members
+      name1 = random.choice(users).name
+    if name2 == None:
+      users = ctx.guild.members
+      name2 = random.choice(users).name
+
+    len1 = round(len(name1)/2)
+    len2 = round(len(name2)/2)
+
+    embed = discord.Embed(title=f"{name1} x {name2}", description=f"{name1[:len1]}{name2[len2:]}")
+
+    await ctx.send(embed=embed)
+
+
 
 
 def setup(client):
