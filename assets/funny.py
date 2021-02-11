@@ -3,15 +3,23 @@ from discord.ext import commands
 #
 import asyncio
 
+from dotenv import load_dotenv
+import os
+
 class EatDogs(commands.Cog):
   def __init__(self, client):
     self.client = client
 
-    self.spam = True
+    self.spam = False
 
-  def trollers(ctx):
-    return False
+  def trollers(self, ctx):
+    return self.spam
     return str(ctx.author.id) in ["428369959501168650", "310806196330168320", "572152846351597579", "363614905607389186"]
+
+  def is_dev(ctx):
+    load_dotenv()
+    dev = os.getenv("DEV")
+    return str(ctx.author.id) in dev
 
   @commands.command(hidden=True)
   @commands.check(trollers)
@@ -30,11 +38,15 @@ class EatDogs(commands.Cog):
       i += 1
 
   @commands.command(hidden=True)
-  @commands.check(trollers)
+  @commands.check(is_dev)
   async def stop_spam(self, ctx, *args):
     self.spam = False
-    await asyncio.sleep(10)
+
+  @commands.command(hidden=True)
+  @commands.check(is_dev)
+  async def allow_spam(self, ctx):
     self.spam = True
+    
 
   
 
